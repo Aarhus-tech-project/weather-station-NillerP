@@ -1,0 +1,3 @@
+C:/Users/nicla/Documents/PlatformIO/Projects/Mqqt-client/build/CMakeFiles/HelloWin.dir
+C:/Users/nicla/Documents/PlatformIO/Projects/Mqqt-client/build/CMakeFiles/edit_cache.dir
+C:/Users/nicla/Documents/PlatformIO/Projects/Mqqt-client/build/CMakeFiles/rebuild_cache.dir
