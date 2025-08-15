@@ -53,3 +53,7 @@ ArduinoJson
 - [libpqxx](https://github.com/jtv/libpqxx) (PostgreSQL C++ library)
 
 ### WeaterStationWeb
+
+1. npm Install
+2. npm run dev
+3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
