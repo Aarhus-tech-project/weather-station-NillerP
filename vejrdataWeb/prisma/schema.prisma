@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model vejrdata {
+  id            Int       @id @default(autoincrement())
+  tidspunkt     DateTime? @default(now()) @db.Timestamp(6)
+  temperatur    Float?    @db.Real
+  luftfugtighed Float?    @db.Real
+  tryk          Float?    @db.Real
+}
