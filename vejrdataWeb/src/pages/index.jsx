@@ -13,16 +13,16 @@ export default function HomePage() {
   const [tryk, setTryk] = useState(null);
   const [luftfugtighed, setLuftfugtighed] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
-  const [chartData, setChartData] = useState([]);
+  const [tempChartData, setTempChartData] = useState([]);
+  const [trykChartData, setTrykChartData] = useState([]);
+  const [luftChartData, setLuftChartData] = useState([]);
   const [fetchError, setFetchError] = useState(false);
-
   useEffect(() => {
     const fetchData = () => {
       fetch("/api/vejrdata")
         .then((response) => {
           if (!response.ok) {
             setFetchError(true);
-            return Promise.reject("Failed to fetch");
           }
           return response.json();
         })
@@ -35,14 +35,28 @@ export default function HomePage() {
 
           setTemperatur(temp);
           setTryk(tryk);
-          setLuftfugtighed(Math.floor(luft));
+          setLuftfugtighed(luft);
           setCreatedAt(tid);
 
-          setChartData((prev) => [
+          setTempChartData((prev) => [
             ...prev,
             {
               name: new Date(tid).toLocaleTimeString(),
               value: temp,
+            },
+          ]);
+          setTrykChartData((prev) => [
+            ...prev,
+            {
+              name: new Date(tid).toLocaleTimeString(),
+              value: tryk,
+            },
+          ]);
+          setLuftChartData((prev) => [
+            ...prev,
+            {
+              name: new Date(tid).toLocaleTimeString(),
+              value: luft,
             },
           ]);
         })
@@ -64,32 +78,32 @@ export default function HomePage() {
           Fetching data failed
         </div>
       )}
-      <div className="flex justify-center">
-        <div className="flex justify-between w-200a mt-10 border rounded-lg h-150 p-4">
-          <p className="text-l font-bold text-white">
+      <div className="flex flex-wrap">
+        <div className="rows justify-between w-107 mt-10 border rounded-lg h-auto p-4 m-10">
+          <p className="text-l font-bold text-white p-6">
             🥵Temperatur:
             {temperatur !== null ? `${temperatur}°C` : "Loading..."}
           </p>
-          <p className="text-l font-bold text-white">
+          <p className="text-l font-bold text-white p-6">
             🌬️Tryk: {tryk !== null ? `${tryk} hPa` : "Loading..."}
           </p>
-          <p className="text-l font-bold text-white">
+          <p className="text-l font-bold text-white p-6">
             🌫️Luftfugtighed:
             {luftfugtighed !== null ? `${luftfugtighed}%` : "Loading..."}
           </p>
-          <p className="text-l font-bold text-white">
-            Tidspunkt:
+          <p className="text-l font-bold text-white p-6">
+            🕔Tidspunkt:
             {createdAt !== null
               ? new Date(createdAt).toLocaleTimeString()
               : "Loading..."}
           </p>
         </div>
-        <div className="w-1/2 mt-10">
+        <div className="w-1/2 mt-10 ml-26">
           <h1 className="text-2xl font-bold text-white pl-20">Temperatur:</h1>
           <LineChart
             width={500}
             height={300}
-            data={chartData}
+            data={tempChartData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -99,6 +113,42 @@ export default function HomePage() {
             />
             <Tooltip />
             <Line type="monotone" dataKey="value" stroke="#8884d8" />
+          </LineChart>
+        </div>
+        <div className="w-1/2 mt-10">
+          <h1 className="text-2xl font-bold text-white pl-20">Tryk:</h1>
+          <LineChart
+            width={500}
+            height={300}
+            data={trykChartData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis
+              domain={[(dataMin) => dataMin - 0.5, (dataMax) => dataMax + 0.5]}
+            />
+            <Tooltip />
+            <Line type="monotone" dataKey="value" stroke="#82ca9d" />
+          </LineChart>
+        </div>
+        <div className="w-1/2 mt-10">
+          <h1 className="text-2xl font-bold text-white pl-20">
+            Luftfugtighed:
+          </h1>
+          <LineChart
+            width={500}
+            height={300}
+            data={luftChartData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis
+              domain={[(dataMin) => dataMin - 0.5, (dataMax) => dataMax + 0.5]}
+            />
+            <Tooltip />
+            <Line type="monotone" dataKey="value" stroke="#ffc658" />
           </LineChart>
         </div>
       </div>

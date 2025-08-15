@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         orderBy: {
           tidspunkt: "desc",
         },
-        take: 1,
+        take: 20,
       });
       res.status(200).json(data);
     } catch (error) {
